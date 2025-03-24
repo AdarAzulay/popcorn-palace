@@ -26,8 +26,15 @@ class MovieServiceTest {
 
     @Test
     void testAddMovie_SimpleSuccess() {
-        // mock object set up
-        MovieDTO movieDTO = new MovieDTO("Inception", "Sci-Fi", 148, 8.8, 2010);
+        MovieDTO movieDTO = MovieDTO.builder()
+                .id(null)
+                .title("Inception")
+                .genre("Sci-Fi")
+                .duration(148)
+                .rating(8.8)
+                .releaseYear(2010)
+                .build();
+
         Movie movieEntity = Movie.builder()
                 .id(1L)
                 .title("Inception")
@@ -39,17 +46,25 @@ class MovieServiceTest {
 
         when(movieRepository.findByTitle("Inception")).thenReturn(Optional.empty());
         when(movieRepository.save(any(Movie.class))).thenReturn(movieEntity);
+
         MovieDTO result = movieService.addMovie(movieDTO);
 
         assertNotNull(result, "Result should not be null");
         assertEquals("Inception", result.getTitle(), "Title should match");
-        verify(movieRepository).save(any(Movie.class)); // ensure save was called
+        verify(movieRepository).save(any(Movie.class));
     }
 
     @Test
     void testAddMovie_AlreadyExists() {
+        MovieDTO movieDTO = MovieDTO.builder()
+                .id(null)
+                .title("Inception")
+                .genre("Sci-Fi")
+                .duration(148)
+                .rating(8.8)
+                .releaseYear(2010)
+                .build();
 
-        MovieDTO movieDTO = new MovieDTO("Inception", "Sci-Fi", 148, 8.8, 2010);
         Movie existingMovie = Movie.builder()
                 .id(1L)
                 .title("Inception")
@@ -60,15 +75,24 @@ class MovieServiceTest {
                 .build();
 
         when(movieRepository.findByTitle("Inception")).thenReturn(Optional.of(existingMovie));
+
         assertThrows(IllegalArgumentException.class, () -> movieService.addMovie(movieDTO));
     }
 
     @Test
     void testUpdateMovie_MovieNotFound() {
-
         when(movieRepository.findByTitle("Nonexistent"))
                 .thenReturn(Optional.empty());
-        MovieDTO updateDTO = new MovieDTO("Nonexistent", "Action", 120, 8.0, 2015);
+
+        MovieDTO updateDTO = MovieDTO.builder()
+                .id(null)
+                .title("Nonexistent")
+                .genre("Action")
+                .duration(120)
+                .rating(8.0)
+                .releaseYear(2015)
+                .build();
+
         assertThrows(EntityNotFoundException.class, () ->
                 movieService.updateMovie("Nonexistent", updateDTO));
     }

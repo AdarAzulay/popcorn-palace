@@ -26,14 +26,28 @@ class MovieControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    // deprecation warning on MockBean
     @MockBean
     MovieService movieService;
 
     @Test
     void testAddMovie() throws Exception {
-        MovieDTO request = new MovieDTO("Inception", "Sci-Fi", 148, 8.8, 2010);
-        MovieDTO response = new MovieDTO("Inception", "Sci-Fi", 148, 8.8, 2010);
+        MovieDTO request = MovieDTO.builder()
+                .id(null)
+                .title("Inception")
+                .genre("Sci-Fi")
+                .duration(148)
+                .rating(8.8)
+                .releaseYear(2010)
+                .build();
+
+        MovieDTO response = MovieDTO.builder()
+                .id(1L)
+                .title("Inception")
+                .genre("Sci-Fi")
+                .duration(148)
+                .rating(8.8)
+                .releaseYear(2010)
+                .build();
 
         when(movieService.addMovie(any(MovieDTO.class))).thenReturn(response);
 
@@ -46,7 +60,14 @@ class MovieControllerTest {
 
     @Test
     void testGetAllMovies() throws Exception {
-        MovieDTO movie = new MovieDTO("Inception", "Sci-Fi", 148, 8.8, 2010);
+        MovieDTO movie = MovieDTO.builder()
+                .id(1L)
+                .title("Inception")
+                .genre("Sci-Fi")
+                .duration(148)
+                .rating(8.8)
+                .releaseYear(2010)
+                .build();
 
         when(movieService.getAllMovies()).thenReturn(List.of(movie));
 

@@ -42,22 +42,18 @@ public class MovieServiceImpl implements MovieService {
         Movie existing = movieRepository.findByTitle(pathTitle)
                 .orElseThrow(() -> new EntityNotFoundException("Movie not found: " + pathTitle));
 
-        // 2. Ensure pathTitle == bodyDTO.getTitle()
         if (!pathTitle.equals(bodyDTO.getTitle())) {
             throw new IllegalArgumentException(
                     "Title in path (" + pathTitle + ") does not match title in request body (" + bodyDTO.getTitle() + ")"
             );
         }
 
-        // 3. Now safely update other fields
+
         existing.setGenre(bodyDTO.getGenre());
         existing.setDuration(bodyDTO.getDuration());
         existing.setRating(bodyDTO.getRating());
         existing.setReleaseYear(bodyDTO.getReleaseYear());
-        // If you want to allow renaming the movie, do:
-        // existing.setTitle(bodyDTO.getTitle());
 
-        // 4. Save & return updated movie
         Movie updated = movieRepository.save(existing);
         return toDTO(updated);
     }
@@ -70,7 +66,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     // Mapping Methods
-
     private MovieDTO toDTO(Movie movie) {
         return MovieDTO.builder()
                 .id(movie.getId())
