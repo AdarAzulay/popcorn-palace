@@ -32,21 +32,22 @@ public class ShowtimeServiceImpl implements ShowtimeService {
     @Override
     public ShowtimeDTO addShowtime(ShowtimeDTO showtimeDTO) {
         Movie movie = movieRepository.findById(showtimeDTO.getMovieId())
-                .orElseThrow(() -> new EntityNotFoundException("Movie not found with the movie id: " + showtimeDTO.getMovieId()));
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found with id: " + showtimeDTO.getMovieId()));
 
-
+        if (showtimeDTO.getEndTime() == null) {
+            showtimeDTO.setEndTime(showtimeDTO.getStartTime().plusMinutes(movie.getDuration()));
+        }
+        if (!showtimeDTO.getStartTime().isBefore(showtimeDTO.getEndTime())) {
+            throw new IllegalArgumentException("startTime must be before endTime");
+        }
         boolean conflict = !showtimeRepository.findOverlappingShowtimes(
                 showtimeDTO.getTheater(), showtimeDTO.getStartTime(), showtimeDTO.getEndTime()
         ).isEmpty();
-
         if (conflict) {
             throw new IllegalArgumentException("Overlapping showtime in the same theater");
         }
-
-        // Convert DTO to entity and save
         Showtime showtime = toEntity(showtimeDTO);
         showtime.setMovie(movie);
-
         Showtime savedShowtime = showtimeRepository.save(showtime);
         return toDTO(savedShowtime);
     }
@@ -60,23 +61,27 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
     @Override
     public ShowtimeDTO updateShowtime(Long showtimeId, ShowtimeDTO showtimeDTO) {
-        // 1. Find existing showtime by ID
+        // Find existing showtime by ID
         Showtime existing = showtimeRepository.findById(showtimeId)
                 .orElseThrow(() -> new EntityNotFoundException("Showtime not found: " + showtimeId));
+        if (!showtimeDTO.getStartTime().isBefore(showtimeDTO.getEndTime())) {
+            throw new IllegalArgumentException("startTime must be before endTime");
+        }
 
-        // 2. Update fields
+        boolean conflict = showtimeRepository.findOverlappingShowtimes(
+                showtimeDTO.getTheater(), showtimeDTO.getStartTime(), showtimeDTO.getEndTime()
+        ).stream().anyMatch(s -> !s.getId().equals(showtimeId));
+        if (conflict) {
+            throw new IllegalArgumentException("Overlapping showtime in the same theater");
+        }
+        // Update fields
         existing.setPrice(showtimeDTO.getPrice());
         existing.setTheater(showtimeDTO.getTheater());
         existing.setStartTime(showtimeDTO.getStartTime());
         existing.setEndTime(showtimeDTO.getEndTime());
-
-        // 4. Save
         Showtime updated = showtimeRepository.save(existing);
-
-        // 5. Return updated showtime as DTO
         return toDTO(updated);
     }
-
 
     @Override
     public void deleteShowtime(Long showtimeId) {
@@ -90,9 +95,7 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
     private ShowtimeDTO toDTO(Showtime showtime) {
         return ShowtimeDTO.builder()
-//                .movieId(showtime.getMovie().getId()) // Convert movie entity to movie ID
-                .id(showtime.getId())
-                .movieTitle(showtime.getMovie().getTitle())  // ✅ not ID
+                .movieTitle(showtime.getMovie().getTitle())
                 .theater(showtime.getTheater())
                 .startTime(showtime.getStartTime())
                 .endTime(showtime.getEndTime())

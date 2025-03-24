@@ -49,7 +49,7 @@ class ShowtimeServiceTest {
                 .build();
 
         sampleShowtimeDTO = ShowtimeDTO.builder()
-                .movieTitle("Inception")
+                .movieId(1L)  // Ensure movieId is set
                 .theater("IMAX")
                 .startTime(LocalDateTime.of(2025, 3, 22, 18, 30))
                 .endTime(LocalDateTime.of(2025, 3, 22, 21, 0))
@@ -68,7 +68,7 @@ class ShowtimeServiceTest {
 
     @Test
     void testAddShowtime_Success() {
-        when(movieRepository.findByTitle("Inception")).thenReturn(Optional.of(sampleMovie));
+        when(movieRepository.findById(1L)).thenReturn(Optional.of(sampleMovie));
         when(showtimeRepository.findOverlappingShowtimes(anyString(), any(), any())).thenReturn(Collections.emptyList());
         when(showtimeRepository.save(any(Showtime.class))).thenReturn(sampleShowtime);
 
@@ -82,7 +82,6 @@ class ShowtimeServiceTest {
 
     @Test
     void testUpdateShowtime_Success() {
-        // Arrange: simulate existing showtime is found.
         when(showtimeRepository.findById(1L)).thenReturn(Optional.of(sampleShowtime));
         when(showtimeRepository.save(any(Showtime.class))).thenReturn(sampleShowtime);
 
@@ -103,7 +102,6 @@ class ShowtimeServiceTest {
 
     @Test
     void testGetShowtimeById_NotFound() {
-
         when(showtimeRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> showtimeService.getShowtimeById(1L));
     }
