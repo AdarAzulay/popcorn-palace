@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class MovieDTO {
 
+    private Long id;
     private String title;
     private String genre;
     private Integer duration; // mins

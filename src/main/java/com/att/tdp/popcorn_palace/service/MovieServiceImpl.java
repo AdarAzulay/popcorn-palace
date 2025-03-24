@@ -73,6 +73,7 @@ public class MovieServiceImpl implements MovieService {
 
     private MovieDTO toDTO(Movie movie) {
         return MovieDTO.builder()
+                .id(movie.getId())
                 .title(movie.getTitle())
                 .genre(movie.getGenre())
                 .duration(movie.getDuration())
