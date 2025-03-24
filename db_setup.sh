@@ -1,6 +1,5 @@
 #!/bin/bash
 # db_setup.sh - Start PostgreSQL (using Homebrew) and create the database and user for Popcorn Palace
-
 echo "Starting PostgreSQL server via Homebrew..."
 brew services start postgresql
 

@@ -10,6 +10,44 @@ Make sure you have the following installed:
 - **PostgreSQL** (via Homebrew on macOS, or manually on Windows)
 - Git
 
+
+If any of these aren't installed yet, use these commands:
+
+### On macOS (using Homebrew)
+```bash
+brew install openjdk@21 maven postgresql git
+# For Java, add to PATH:
+sudo ln -sfn /usr/local/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
+```
+Maven:
+
+```bash
+brew install maven
+```
+PostgreSQL:
+
+```bash
+brew install postgresql
+```
+Git:
+```bash
+brew install git
+```
+This single command installs all required packages:
+```bash
+brew install openjdk@21 maven postgresql git
+```
+### On Windows (using Chocolatey)
+Open PowerShell as Administrator and run:
+```powershell
+choco install openjdk maven postgresql git -y
+```
+Or install manually from their official websites:
+- [Java](https://jdk.java.net/)
+- [Maven](https://maven.apache.org/download.cgi)
+- [PostgreSQL](https://www.postgresql.org/download/windows/)
+- [Git](https://git-scm.com/download/win)
+
 ---
 
 ## Run the Project
