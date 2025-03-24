@@ -12,7 +12,7 @@ Make sure you have the following installed:
 
 ---
 
-## 🚀 Run the Project
+## Run the Project
 
 ### 1. Clone the Repository
 
@@ -48,7 +48,7 @@ chmod +x ./run_app.sh
 
 ---
 
-## 🧪 Run Tests
+## Run Tests
 
 ```bash
 mvn test
@@ -56,7 +56,7 @@ mvn test
 
 ---
 
-## 📦 API Reference
+## API Reference
 
 All endpoints are documented in the [`README.md`](./README.md) file.
 
