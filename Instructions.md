@@ -22,20 +22,6 @@ For Java, add to PATH:
 ```bash
 sudo ln -sfn /usr/local/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
 ```
-Maven:
-
-```bash
-brew install maven
-```
-PostgreSQL:
-
-```bash
-brew install postgresql
-```
-Git:
-```bash
-brew install git
-```
 
 ---
 
