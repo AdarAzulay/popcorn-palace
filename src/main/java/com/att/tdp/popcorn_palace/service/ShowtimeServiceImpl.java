@@ -31,12 +31,10 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
     @Override
     public ShowtimeDTO addShowtime(ShowtimeDTO showtimeDTO) {
-        // Check if movie exists
-        Movie movie = movieRepository.findByTitle(showtimeDTO.getMovieTitle())
-                .orElseThrow(() -> new EntityNotFoundException("Movie not found: " + showtimeDTO.getMovieTitle()));
+        Movie movie = movieRepository.findById(showtimeDTO.getMovieId())
+                .orElseThrow(() -> new EntityNotFoundException("Movie not found with the movie id: " + showtimeDTO.getMovieId()));
 
 
-        // Prevent overlapping showtimes in the same theater
         boolean conflict = !showtimeRepository.findOverlappingShowtimes(
                 showtimeDTO.getTheater(), showtimeDTO.getStartTime(), showtimeDTO.getEndTime()
         ).isEmpty();
@@ -47,7 +45,7 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
         // Convert DTO to entity and save
         Showtime showtime = toEntity(showtimeDTO);
-        showtime.setMovie(movie); // Set the movie reference
+        showtime.setMovie(movie);
 
         Showtime savedShowtime = showtimeRepository.save(showtime);
         return toDTO(savedShowtime);
