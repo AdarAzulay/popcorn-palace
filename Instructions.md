@@ -80,7 +80,7 @@ mvn test
 
 ## API Reference
 
-All endpoints are documented in the [`README.md`](./Readme.md) file.
+All endpoints are documented in the [`Readme.md`](./Readme.md) file.
 
 ---
 
