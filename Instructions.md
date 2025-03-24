@@ -33,10 +33,7 @@ Git:
 ```bash
 brew install git
 ```
-This single command installs all required packages:
-```bash
-brew install openjdk@21 maven postgresql git
-```
+
 ### On Windows (using Chocolatey)
 Open PowerShell as Administrator and run:
 ```powershell
